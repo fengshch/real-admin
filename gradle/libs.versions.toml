@@ -1,0 +1,106 @@
+[versions]
+springCloudVer = '2023.0.3'
+#springCloudVer = '2024.0.0-M1'
+springBootVer = '3.3.3'
+#springBootVer = '3.4.0-SNAPSHOT'
+springDependencyManagementVer = "1.1.6"
+#jqueryVer = '4.0.0-beta'
+jqueryVer = '3.7.1'
+bootstrapVer = "5.3.3"
+springAuthorizatonServerVer = "1.3.1"
+#okhttp3Ver= "5.0.0-alpha.14"
+okhttp3Ver= "4.12.0"
+oauth2OidcSdkVer = "11.14"
+alibabaCloudVer = '2023.0.1.2'
+springCloudBootStrapVer = '4.1.4'
+postgresqlVer ='42.7.3'
+flywayVer = '10.17.0'
+mybatisFlexVer = '1.9.5'
+mybatisSpringVer = "3.0.4"
+#mapstructVer = '1.6.0.RC1'
+mapstructVer = '1.5.5.Final'
+lombokMapstructBindingVer = '0.2.0'
+wechatPayVer = '0.2.12'
+guavaVer = '33.2.1-jre'
+logbackVer = '1.5.6'
+jsonVer = "20240303"
+openapiVer = "2.6.0"
+
+[libraries]
+springbootGradlePlugin = {group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBootVer"}
+springDependencyManagementPlugin = {group = "io.spring.gradle", name = "dependency-management-plugin", version.ref = "springDependencyManagementVer"}
+springBootDependencies = {group ='org.springframework.boot', name = 'spring-boot-dependencies', version.ref = 'springBootVer'}
+springAuthorizationServer = { group = "org.springframework.security", name = "spring-security-oauth2-authorization-server", version.ref = "springAuthorizatonServerVer"}
+oauth2ResourceServer = {group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server"}
+springBootStarterSecurity = {group = "org.springframework.boot", name= "spring-boot-starter-security"}
+springBootStarterOAuth2Client= {group = "org.springframework.boot", name="spring-boot-starter-oauth2-client"}
+springSecurityCas = {group = "org.springframework.security", name="spring-security-cas"}
+springSecurityOauth2Core = {group = "org.springframework.security", name="spring-security-oauth2-core"}
+springSecurityCore = {group ='org.springframework.security', name = 'spring-security-core'}
+oauth2Core = {group = "org.springframework.security", name="spring-security-oauth2-core"}
+
+springBootStarterWeb = {group = "org.springframework.boot", name="spring-boot-starter-web"}
+springBootStarterWebflux = {group = "org.springframework.boot", name="spring-boot-starter-webflux"}
+springWebflux = {group = "org.springframework", name = "spring-webflux"}
+springBootStarterThymeleaf={group ="org.springframework.boot", name="spring-boot-starter-thymeleaf"}
+thymeleafExtrasSpringsecurity6 = {group = "org.thymeleaf.extras", name="thymeleaf-extras-springsecurity6"}
+
+reactorNetty = {group = "io.projectreactor.netty", name = "reactor-netty"}
+
+webjarsLocatorCore = {group = "org.webjars", name  = "webjars-locator-core"}
+bootstrap = {group =  "org.webjars", name = "bootstrap", version.ref= "bootstrapVer"}
+jquery = { group = "org.webjars", name = "jquery", version.ref="jqueryVer"}
+
+mapstruct = {group = "org.mapstruct", name="mapstruct", version.ref="mapstructVer"}
+mapstructProcessor = {group = "org.mapstruct", name="mapstruct-processor", version.ref="mapstructVer"}
+lombokMapstructBinding = {group = "org.projectlombok", name="lombok-mapstruct-binding", version.ref="lombokMapstructBindingVer"}
+lombok = {group = "org.projectlombok", name = "lombok"}
+guava = {group = "com.google.guava", name="guava", version.ref="guavaVer"}
+logbackClassic = {group = "ch.qos.logback", name="logback-classic", version.ref="logbackVer"}
+
+springBootStarterJdbc = {group = "org.springframework.boot", name="spring-boot-starter-jdbc"}
+springBootStarterRedis = {group = "org.springframework.boot", name="spring-boot-starter-data-redis"}
+jedis = {group="redis.clients", name="jedis"}
+springBootStarterDataJpa = {group = "org.springframework.boot", name = "spring-boot-starter-data-jpa"}
+mybatisFlexSpringBootStarter = {group = "com.mybatis-flex", name="mybatis-flex-spring-boot3-starter", version.ref="mybatisFlexVer"}
+mybatisSpring = {group = "org.mybatis", name="mybatis-spring", version.ref="mybatisSpringVer"}
+flywayPostgresql ={group = "org.flywaydb", name="flyway-database-postgresql", version.ref="flywayVer"}
+
+postgresql = {group = "org.postgresql", name="postgresql", version.ref="postgresqlVer"}
+mysql={group = "com.mysql", name="mysql-connector-j"}
+h2 = {group = "com.h2database", name="h2"}
+
+springBootStarterTest= {group =  "org.springframework.boot", name  = "spring-boot-starter-test"}
+springSecurityTest = { group = "org.springframework.security", name  = "spring-security-test"}
+reactorTest = {group = "io.projectreactor", name="reactor-test"}
+junitJupiter = {group = "org.junit.jupiter", name="junit-jupiter"}
+htmlunit = {group = "net.sourceforge.htmlunit", name="htmlunit"}
+assertjCore = {group = "org.assertj", name="assertj-core"}
+mockwebserver = {group = "com.squareup.okhttp3", name = "mockwebserver", version.ref="okhttp3Ver"}
+oauth2OidcSdk = {group = "com.nimbusds", name= "oauth2-oidc-sdk", version.ref="oauth2OidcSdkVer"}
+
+springCloudDependencies = {group = "org.springframework.cloud", name="spring-cloud-dependencies", version.ref="springCloudVer"}
+springCloudStarterGateway = {group = "org.springframework.cloud", name="spring-cloud-starter-gateway"}
+springCloudStarterLoadbalancer = {group = "org.springframework.cloud", name="spring-cloud-starter-loadbalancer"}
+springCloudStarterOpenfeign = {group = "org.springframework.cloud", name="spring-cloud-starter-openfeign"}
+springCloudBootstrap = {group = "org.springframework.cloud", name="spring-cloud-starter-bootstrap", version.ref="springCloudBootStrapVer"}
+alibabaNacosDiscovery={group = "com.alibaba.cloud", name="spring-cloud-starter-alibaba-nacos-discovery", version.ref="alibabaCloudVer"}
+alibabaNacosConfig={group = "com.alibaba.cloud", name="spring-cloud-starter-alibaba-nacos-config", version.ref="alibabaCloudVer"}
+
+springBootStarterActuator = {group = "org.springframework.boot", name="spring-boot-starter-actuator"}
+springBootDevtools = {group = "org.springframework.boot", name="spring-boot-devtools"}
+springBootConfigurationProcessor = {group = "org.springframework.boot", name="spring-boot-configuration-processor"}
+wechatPay = {group = "com.github.wechatpay-apiv3", name="wechatpay-java", version.ref="wechatPayVer"}
+json = {group="org.json", name="json", version.ref="jsonVer"}
+openapiStarterWebMvcUI = {group = "org.springdoc", name="springdoc-openapi-starter-webmvc-ui", version.ref="openapiVer"}
+openapiStarterWebfluxUI = {group = "org.springdoc", name="springdoc-openapi-starter-webflux-ui", version.ref="openapiVer"}
+
+[bundles]
+springBoot = ["springBootStarterWeb"]
+springCloud = ["springCloudBootstrap"]
+alibabaCloud = ["alibabaNacosDiscovery", "alibabaNacosConfig"]
+
+
+[plugins]
+springBoot = {id= "org.springframework.boot", version.ref="springBootVer"}
+springDependencyManagement =  {id = "io.spring.dependency-management", version.ref="springDependencyManagementVer"}

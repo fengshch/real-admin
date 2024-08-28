@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.16.12.219:5432/uaa
+    username: bill
+    password: 123456
+  data:
+    redis:
+      host: 172.16.12.219
+      port: 6379
+      password: 123456
+      database: 0
+      connect-timeout: 3000ms
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 20 #连接池最大连接数（使用负值表示没有限制）,默认20
+          max-wait: -1ms # 连接池最大阻塞等待时间（使用负值表示没有限制）,默认-1
+          max-idle: 8 # 连接池中的最大空闲连接,默认8
+          min-idle: 0 # 连接池中的最小空闲连接,默认0
+#  session:
+#    redis:
+#      flush-mode: on_save
+##      namespace: spring:session:auth-server
+#      namespace: spring:session
+##      :auth-server
+
+
+logging:
+  level:
+    org.springframework.security: debug
+    org.springframework.security.oauth2: debug
+#springdoc:
+#  show-oauth2-endpoints: true
+
+application:
+  admin-username: admin
+  admin-password: admin
+  admin-email: admin@example.com

@@ -1,0 +1,22 @@
+plugins {
+    id 'spring-common'
+    id 'com.github.fengshch.mybatis-flex-gradle-plugin'
+}
+
+dependencies {
+    implementation(libs.mybatisFlexSpringBootStarter) {
+        exclude group: 'org.mybatis', module: 'mybatis-spring'
+    }
+    implementation(libs.mybatisSpring)
+    implementation(libs.openapiStarterWebMvcUI)
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+//    runtimeOnly 'org.postgresql:postgresql'
+
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}

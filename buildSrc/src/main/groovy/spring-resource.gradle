@@ -1,0 +1,13 @@
+plugins{
+    id("spring-web")
+}
+
+dependencies {
+    implementation(project(":common-web"))
+    implementation(platform(libs.springCloudDependencies))
+    implementation(libs.bundles.alibabaCloud)
+    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+}

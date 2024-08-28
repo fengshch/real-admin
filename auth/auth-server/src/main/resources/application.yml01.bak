@@ -1,0 +1,14 @@
+server:
+  port: 9000
+  ssl:
+    enabled: false
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
+#        same-site: lax
+#        secure: false
+spring:
+  profiles:
+    active: dev

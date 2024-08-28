@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: messages01-resource
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.16.12.219:8848
+        enabled: true
+        namespace: real
+        group: DEFAULT_GROUP
+      discovery:
+        server-addr: 172.16.12.219:8848
+        enabled: true
+        namespace: real
+        group: DEFAULT_GROUP
+  config:
+    import:
+      - nacos:${spring.application.name}.yml
+  profiles:
+    active: dev
+---
+spring:
+  config:
+    import:
+      - optional:nacos:${spring.application.name}-dev.yml
+    activate:
+      on-profile: dev
+---
+spring:
+  config:
+    import:
+      - optional:nacos:${spring.application.name}-prod.yml
+    activate:
+      on-profile: prod
+

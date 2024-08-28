@@ -1,0 +1,15 @@
+plugins {
+    id 'spring-common'
+}
+
+dependencies {
+    compileOnly('org.springframework.boot:spring-boot-starter-web')
+}
+
+bootJar{
+    enabled = false
+}
+
+jar{
+    enabled = true
+}

@@ -11,51 +11,31 @@ plugins {
 }
 
 rootProject.name = 'real-admin'
-include(':common-core')
-project(':common-core').projectDir =file("common/common-core")
-project(':common-core').name = 'common-core'
 
-include(':common-web')
-project(':common-web').projectDir =file("common/common-web")
-project(':common-web').name = 'common-web'
+include('common:common-core')
+include('common:common-web')
 
-include(':demo01')
-project(':demo01').projectDir = file("samples/demo01")
-project(':demo01').name = 'demo01'
+include('auth:auth-common')
+include('auth:auth-server')
 
-include(':auth-common')
-project(':auth-common').projectDir = file("auth/auth-common")
-project(':auth-common').name = 'auth-common'
+include('platform:platform-common')
+include('platform:platform-server')
 
-include(':auth-server')
-project(':auth-server').projectDir = file("auth/auth-server")
-project(':auth-server').name = 'auth-server'
+include('email:email-common')
+include('email:email-server')
 
-include(':gateway-server')
-project(':gateway-server').projectDir = file("gateway/gateway-server")
-project(':gateway-server').name = 'gateway-server'
+include('gateway:gateway-server')
 
-include(':bff-server')
-project(':bff-server').projectDir = file("bff/bff-server")
-project(':bff-server').name = 'bff-server'
+include('bff:bff-server')
+include('bff:bff-mvc')
 
-include(':bff-mvc')
-project(':bff-mvc').projectDir = file("bff/bff-mvc")
-project(':bff-mvc').name = 'bff-mvc'
+include('xxl-job:xxl-job-server')
+include('xxl-job:xxl-job-executor')
+include('xxl-job:xxl-job-common')
 
-include(':messages01-resource')
-project(':messages01-resource').projectDir = file("samples/messages01-resource")
-project(':messages01-resource').name = 'messages01-resource'
-
-include(':messages02-resource')
-project(':messages02-resource').projectDir = file("samples/messages02-resource")
-project(':messages02-resource').name = 'messages02-resource'
-
-include(':messages-client')
-project(':messages-client').projectDir = file("samples/messages-client")
-project(':messages-client').name = 'messages-client'
-
-include(':webflux-client')
-project(':webflux-client').projectDir = file("samples/webflux-client")
-project(':webflux-client').name = 'webflux-client'
+include('samples:demo01')
+include('samples:messages01-resource')
+include('samples:messages02-resource')
+include('samples:messages-client')
+include('samples:webflux-client')
 

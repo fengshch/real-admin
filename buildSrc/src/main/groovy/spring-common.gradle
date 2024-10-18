@@ -29,13 +29,14 @@ repositories {
 
 dependencies {
     implementation(libs.mapstruct)
-    testImplementation(libs.mapstruct)
+//    testImplementation(libs.mapstruct)
 
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor(libs.mapstructProcessor)
-    testAnnotationProcessor(libs.mapstructProcessor)
+//    testAnnotationProcessor(libs.mapstructProcessor)
     annotationProcessor(libs.lombokMapstructBinding)
     testAnnotationProcessor(libs.lombokMapstructBinding)
-
+    implementation 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'

@@ -4,17 +4,29 @@ import lombok.Getter;
 
 @Getter
 public enum ResultEnum {
-    RC200(200, "success"),
+    SUCCESS(200, "success"),
 
-    RC401(401, "Unauthorized"),
+    BAD_REQUEST(400, "Bad Request"),
 
-    RC403(403, "Forbidden"),
+    UNAUTHORIZED(401, "Unauthorized"),
 
-    RC404(404, "Not Found"),
+    FORBIDDEN(403, "Forbidden"),
 
-    RC500(500, "Internal Server Error"),
+    NOT_FOUND(404, "Not Found"),
 
-    RC900(900, "Business Error");
+    METHOD_NOT_ALLOWED(405, "Method Not Allowed"),
+
+    ERROR(500, "Error"),
+
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+
+    BAD_GATEWAY(502, "Bad Gateway"),
+
+    SERVICE_UNAVAILABLE(503, "Service Unavailable"),
+
+    GATEWAY_TIMEOUT(504, "Gateway Timeout"),
+
+    BUSINESS_ERROR(900, "Business Error");
 
     private final int code;
 

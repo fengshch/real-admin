@@ -1,0 +1,10 @@
+plugins {
+	id 'spring-web'
+}
+
+
+dependencies {
+	implementation(libs.xxlJobCore)
+	implementation("org.springframework.boot:spring-boot-starter")
+}
+

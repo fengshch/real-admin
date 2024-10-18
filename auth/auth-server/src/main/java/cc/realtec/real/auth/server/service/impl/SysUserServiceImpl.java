@@ -1,12 +1,15 @@
 package cc.realtec.real.auth.server.service.impl;
 
-import cc.realtec.real.auth.common.entity.SysUser;
-import cc.realtec.real.auth.server.entity.converter.SysUserConverter;
-import cc.realtec.real.auth.server.po.SysUserPO;
+import cc.realtec.real.auth.common.domain.dto.SysUserDto;
+import cc.realtec.real.auth.server.domain.SysUserRequest;
+import cc.realtec.real.auth.server.domain.converter.SysUserConverter;
+import cc.realtec.real.auth.server.po.SysUserPo;
 import cc.realtec.real.auth.server.repo.SysUserRepo;
 import cc.realtec.real.auth.server.service.SysUserService;
+import cc.realtec.real.common.web.exception.BusinessException;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,45 +21,69 @@ public class SysUserServiceImpl implements SysUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean create(SysUser sysUser) {
-        sysUser.setPassword(passwordEncoder.encode(sysUser.getPasswordPlain()));
-        SysUserPO sysUserPO = SysUserConverter.INSTANCE.toPO(sysUser);
-        return sysUserRepo.save(sysUserPO);
+    public SysUserPo create(SysUserRequest sysUser) throws BusinessException {
+        sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
+        SysUserPo sysUserPO = SysUserConverter.INSTANCE.requestToPo(sysUser);
+        SysUserPo sysUserPo = sysUserRepo.getOne(QueryWrapper.create().eq("username", sysUserPO.getUsername()));
+        if (sysUserPo != null) {
+            throw new BusinessException("Username is already existed");
+        }
+        SysUserPo email = sysUserRepo.getOne(QueryWrapper.create().eq("email", sysUserPO.getEmail()));
+        if (email != null)
+            throw new BusinessException("Email is already existed");
+        try {
+            sysUserRepo.save(sysUserPO);
+            return sysUserPO;
+        } catch (Exception e) {
+            throw new BusinessException("Create user failed");
+        }
     }
 
     @Override
-    public SysUser findByUsername(String username) {
+    public SysUserDto findByUsername(String username) throws UsernameNotFoundException {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("username", username);
-        SysUserPO sysUserPO = sysUserRepo.getOne(queryWrapper);
-        return SysUserConverter.INSTANCE.toEntity(sysUserPO);
+        SysUserPo sysUserPO = sysUserRepo.getOne(queryWrapper);
+        if (sysUserPO == null) {
+            throw new UsernameNotFoundException("Invalid username or password");
+        }
+        return SysUserConverter.INSTANCE.poToDto(sysUserPO);
     }
 
     @Override
-    public SysUser findByEmail(String email) {
+    public SysUserDto findByEmail(String email) throws UsernameNotFoundException {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("email", email);
-        SysUserPO sysUserPO = sysUserRepo.getOne(queryWrapper);
-        return SysUserConverter.INSTANCE.toEntity(sysUserPO);
+        SysUserPo sysUserPO = sysUserRepo.getOne(queryWrapper);
+        if (sysUserPO == null) {
+            throw new UsernameNotFoundException("Invalid email");
+        }
+        return SysUserConverter.INSTANCE.poToDto(sysUserPO);
     }
 
     @Override
-    public SysUser findByPhoneNumber(String phoneNumber) {
+    public SysUserDto findByPhoneNumber(String phoneNumber) throws UsernameNotFoundException {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("phoneNumber", phoneNumber);
-        SysUserPO sysUserPO = sysUserRepo.getOne(queryWrapper);
-        return SysUserConverter.INSTANCE.toEntity(sysUserPO);
+        SysUserPo sysUserPO = sysUserRepo.getOne(queryWrapper);
+        if (sysUserPO == null) {
+            throw new UsernameNotFoundException("Invalid phone number");
+        }
+        return SysUserConverter.INSTANCE.poToDto(sysUserPO);
     }
 
     @Override
-    public SysUser findById(String id) {
-        SysUserPO sysUserPO = sysUserRepo.getById(id);
-        return SysUserConverter.INSTANCE.toEntity(sysUserPO);
+    public SysUserDto findById(String id) throws UsernameNotFoundException {
+        SysUserPo sysUserPO = sysUserRepo.getById(id);
+        if (sysUserPO == null) {
+            throw new UsernameNotFoundException("User is not existed");
+        }
+        return SysUserConverter.INSTANCE.poToDto(sysUserPO);
     }
 
     @Override
-    public boolean update(SysUser sysUser) {
-        SysUserPO sysUserPO = SysUserConverter.INSTANCE.toPO(sysUser);
+    public boolean update(SysUserDto sysUser) {
+        SysUserPo sysUserPO = SysUserConverter.INSTANCE.dtoToPo(sysUser);
         return sysUserRepo.updateById(sysUserPO);
     }
 
@@ -78,7 +105,6 @@ public class SysUserServiceImpl implements SysUserService {
         queryWrapper.eq("email", email);
         return sysUserRepo.remove(queryWrapper);
     }
-
 
     @Override
     public boolean existsByUsername(String username) {
@@ -125,5 +151,6 @@ public class SysUserServiceImpl implements SysUserService {
     public void resetPassword(String id, String newPassword) {
 
     }
+
 
 }

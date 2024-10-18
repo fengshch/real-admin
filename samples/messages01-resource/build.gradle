@@ -1,20 +1,5 @@
 plugins {
+    id 'spring-web'
     id 'spring-resource'
-}
-
-dependencies {
-//    implementation 'org.springframework.session:spring-session-data-redis'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-//    implementation 'org.apache.commons:commons-pool2'
-//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
-//    compileOnly 'org.projectlombok:lombok'
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-//    annotationProcessor 'org.projectlombok:lombok'
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
-//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    id 'spring-cloud'
 }

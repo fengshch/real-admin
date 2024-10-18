@@ -1,10 +1,14 @@
 package cc.realtec.real.auth.server.service;
 
-import cc.realtec.real.auth.common.entity.SysUser;
+import cc.realtec.real.auth.common.domain.dto.SysUserDto;
+import cc.realtec.real.auth.server.domain.SysUserRequest;
+import cc.realtec.real.auth.server.po.SysUserPo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,20 +20,20 @@ class SysUserServiceTest {
 
     @AfterEach
     public void tearDown() {
-       boolean ret = sysUserService.deleteByUsername("test");
+        boolean ret = sysUserService.deleteByUsername("test");
     }
 
     @Test
     void create() {
-        SysUser sysUser = new SysUser();
+        SysUserRequest sysUser = new SysUserRequest();
         sysUser.setUsername("test");
         sysUser.setPassword("test");
         sysUser.setEmail("test@example.com");
         sysUser.setPhoneNumber("1234567890");
-        sysUser.setAvatarUrl("https://example.com/avatar.jpg");
+        sysUser.setPicture("https://example.com/avatar.jpg");
         sysUser.setNickname("test");
-        boolean result = sysUserService.create(sysUser);
-        assertTrue(result);
+        SysUserPo sysUserpo = sysUserService.create(sysUser);
+        assertNotNull(sysUserpo);
     }
 
     @Test

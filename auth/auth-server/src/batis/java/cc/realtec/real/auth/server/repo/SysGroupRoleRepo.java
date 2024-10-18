@@ -1,14 +1,14 @@
 package cc.realtec.real.auth.server.repo;
 
 import com.mybatisflex.core.service.IService;
-import cc.realtec.real.auth.server.po.SysGroupRolePO;
+import cc.realtec.real.auth.server.po.SysGroupRolePo;
 
 /**
  *  服务层。
  *
  * @author bill
- * @since 2024-08-20
+ * @since 2024-10-18
  */
-public interface SysGroupRoleRepo extends IService<SysGroupRolePO> {
+public interface SysGroupRoleRepo extends IService<SysGroupRolePo> {
 
 }

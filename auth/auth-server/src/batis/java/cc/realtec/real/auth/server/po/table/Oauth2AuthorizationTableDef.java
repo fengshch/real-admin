@@ -9,7 +9,7 @@ import java.io.Serial;
  *  表定义层。
  *
  * @author bill
- * @since 2024-08-20
+ * @since 2024-10-18
  */
 public class Oauth2AuthorizationTableDef extends TableDef {
 

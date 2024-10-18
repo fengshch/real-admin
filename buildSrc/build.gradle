@@ -5,6 +5,7 @@
 plugins {
     // Support convention plugins written in Groovy. Convention plugins are build scripts in 'src/main' that automatically become available as plugins in the main build.
     id 'groovy-gradle-plugin'
+    id 'idea'
 }
 
 repositories {
@@ -19,9 +20,17 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.fengshch:mybatis-flex-gradle-plugin:0.0.1'
+    implementation(libs.mybatisFlexGradlePlugin)
     implementation(libs.postgresql)
     implementation(libs.flywayPostgresql)
     implementation(libs.springbootGradlePlugin)
     implementation(libs.springDependencyManagementPlugin)
+    implementation 'org.flywaydb:flyway-mysql:10.19.0'
+}
+
+idea{
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }

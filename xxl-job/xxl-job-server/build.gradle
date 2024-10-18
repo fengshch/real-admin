@@ -1,0 +1,26 @@
+plugins {
+    id 'spring-web'
+    id 'spring-cloud'
+    id "org.flywaydb.flyway"
+}
+flyway {
+    url = 'jdbc:mysql://172.16.12.219:3306/xxl_job'
+    user = 'bill'
+    password = '123456'
+    cleanDisabled=false
+}
+
+dependencies {
+    implementation(project(":xxl-job:xxl-job-common"))
+//    implementation(project(":common:common-core"))
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3") {
+        exclude group: 'org.mybatis', module: 'mybatis-spring'
+    }
+    implementation(libs.mybatisSpring)
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation(libs.xxlJobCore)
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+}
+

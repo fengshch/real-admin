@@ -1,0 +1,12 @@
+plugins {
+    id 'com.github.fengshch.mybatis-flex-gradle-plugin'
+}
+
+dependencies {
+    implementation(libs.mybatisFlexSpringBootStarter) {
+        exclude group: 'org.mybatis', module: 'mybatis-spring'
+    }
+	implementation(libs.mybatisSpring)
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'org.postgresql:postgresql'
+}

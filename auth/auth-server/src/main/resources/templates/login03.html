@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spring Authorization Server sample</title>
+    <!-- jQuery -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/styles.css"/>
+    >
+</head>
+
+<body>
+<div class="wrapper">
+    <!--    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}">-->
+    <div th:if="${errorMessage}" class="message-container error" role="alert" th:text="${errorMessage}">
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-transparent border-bottom-0">
+                <h2 class="card-title">Login</h2>
+                <p class="card-description">Sign in to your account</p>
+            </div>
+            <div class="card-content">
+                <ul class="nav-tabs" id="loginTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="username-password-tab" data-bs-toggle="tab"
+                                data-bs-target="#username-password" type="button" role="tab"
+                                aria-controls="username-password" aria-selected="true">Username and Password
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="phone-tab" data-bs-toggle="tab" data-bs-target="#phone-tab-pane"
+                                type="button" role="tab" aria-controls="phone" aria-selected="false">Phone Login
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="loginTabsContent">
+                    <div class="tab-pane fade show active" id="username-password" role="tabpanel"
+                         aria-labelledby="username-password-tab">
+                        <form class="form-signin mt-3" method="post" th:action="@{/login}">
+                            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                                Invalid username or password.
+                            </div>
+
+                            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                                You have been logged out.
+                            </div>
+                            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                            <div class="form-floating mb-3">
+                                <input type="text" id="username" name="username" class="form-control" required
+                                       autofocus>
+                                <label for="username">Username</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" id="password" name="password" class="form-control" required>
+                                <label for="password">Password</label>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="phone-tab-pane" role="tabpanel" aria-labelledby="phone-tab">
+                        <form class="form-signin mt-3" method="post" th:action="@{/phone-login}">
+                            <h1 class="h3 mb-3 fw-normal">Phone Login</h1>
+                            <div class="form-floating mb-3">
+                                <input type="tel" id="phone" name="phone" class="form-control" required>
+                                <label for="phone">Phone Number</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" id="otp" name="otp" class="form-control" required>
+                                <label for="otp">OTP</label>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <a class="btn btn-light bg-white" href="/oauth2/authorization/google-idp" role="link">
+                        <img src="/static/assets/img/google.png" width="20"
+                             style="margin-right: 5px;" alt="Sign in with Google">
+                        Sign in with Google
+                    </a>
+                    <a class="btn btn-light bg-white" href="/oauth2/authorization/github-idp" role="link">
+                        <img src="/static/assets/img/github.png" width="24"
+                             style="margin-right: 5px;" alt="Sign in with Github">
+                        Sign in with Github
+                    </a>
+                    <a class="btn btn-light bg-white" href="/oauth2/authorization/wechat-idp" role="link">
+                        <img src="/static/assets/img/wechat.png" width="24"
+                             style="margin-right: 5px;" alt="Sign in with WeChat">
+                        Sign in with WeChat
+                    </a>
+                </div>
+                <p class="mt-3 text-center">Don't have an account? <a href="/register">Register here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

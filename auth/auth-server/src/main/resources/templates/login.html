@@ -1,47 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Spring Authorization Server sample</title>
     <!-- jQuery -->
-    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
     <!-- Bootstrap JS -->
-    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
-    <link rel="stylesheet" href="./assets/css/signin.css" th:href="@{/assets/css/signin.css}" />
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/styles.css"/>
+    >
 </head>
+
 <body>
-<div class="container">
-    <form class="form-signin w-100 m-auto" method="post" th:action="@{/login}">
-        <div th:if="${param.error}" class="alert alert-danger" role="alert">
-            Invalid username or password.
+<div class="wrapper">
+    <!--    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}">-->
+    <div th:if="${errorMessage}" class="message-container error" role="alert" th:text="${errorMessage}">
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-transparent border-bottom-0">
+                <h2 class="card-title">Login</h2>
+                <p class="card-description">Sign in to your account</p>
+            </div>
+            <div class="card-content">
+                <div class="nav-tabs" id="loginTabs" role="tablist">
+                    <button class="tab active" id="username-password-tab" data-bs-toggle="tab" data-bs-target="#username-password" type="button" role="tab">Username and Password
+                    </button>
+                    <button class="tab" id="phone-tab" data-bs-toggle="tab" data-bs-target="#phone-tab-pane" type="button" role="tab">Phone Login</button>
+                </div>
+                <div class="tab-content" id="loginTabsContent">
+                    <div class="tab-pane fade show active" id="username-password" role="tabpanel"
+                         aria-labelledby="username-password-tab">
+                        <form id="usernamePasswordForm" method="post" class="mt-3" th:action="@{/login}">
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="text-end mt-2">
+                                <a href="/forget-password" class="text-sm text-primary">Forgot Password?</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Sign in</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="phone-tab-pane" role="tabpanel" aria-labelledby="phone-tab">
+                        <form id="phoneLoginForm" method="post" class="mt-3">
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="otp" class="form-label">OTP</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="otp" name="otp" required>
+                                    <button class="btn btn-outline" type="button" id="sendOtp">Send OTP</button>
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Sign in</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a class="btn btn-outline w-100 mb-2" href="/oauth2/authorization/google-idp" role="link">
+                        <img src="/static/assets/img/google.png" width="20" style="margin-right: 5px;" alt="Sign in with Google">
+                        Sign in with Google
+                    </a>
+                    <a class="btn btn-outline w-100 mb-2" href="/oauth2/authorization/github-idp" role="link">
+                        <img src="/static/assets/img/github.png" width="24" style="margin-right: 5px;" alt="Sign in with Github">
+                        Sign in with Github
+                    </a>
+                    <a class="btn btn-outline w-100" href="/oauth2/authorization/wechat-idp" role="link">
+                        <img src="/static/assets/img/wechat.png" width="24" style="margin-right: 5px;" alt="Sign in with WeChat">
+                        Sign in with WeChat
+                    </a>
+                </div>
+                <p class="mt-6 text-center text-sm text-muted-foreground">
+                    Don't have an account? <a href="/register" class="font-medium text-primary">Register here</a>
+                </p>
+            </div>
         </div>
-        <div th:if="${param.logout}" class="alert alert-success" role="alert">
-            You have been logged out.
-        </div>
-        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-        <div class="form-floating">
-            <input type="text" id="username" name="username" class="form-control" required autofocus>
-            <label for="username">Username</label>
-        </div>
-        <div class="form-floating">
-            <input type="password" id="password" name="password" class="form-control" required>
-            <label for="password">Password</label>
-        </div>
-        <div>
-            <button class="w-100 btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            <a class="w-100 btn btn-light btn-block bg-white" href="/oauth2/authorization/google-idp" role="link" style="margin-top: 10px">
-                <img src="/assets/img/google.png" th:src="@{/assets/img/google.png}" width="20" style="margin-right: 5px;" alt="Sign in with Google">
-                Sign in with Google
-            </a>
-            <a class="w-100 btn btn-light btn-block bg-white" href="/oauth2/authorization/github-idp" role="link" style="margin-top: 10px">
-                <img src="/assets/img/github.png" th:src="@{/assets/img/github.png}" width="24" style="margin-right: 5px;" alt="Sign in with Github">
-                Sign in with Github
-            </a>
-        </div>
-    </form>
+    </div>
 </div>
 </body>
+
 </html>

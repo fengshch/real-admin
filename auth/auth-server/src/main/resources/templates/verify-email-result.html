@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification Result</title>
+    <!-- jQuery -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div th:if="${message}" class="message-container error" role="alert" th:text="${message}">
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-transparent border-bottom-0">
+                <h2 class="card-title">Email Verification Result</h2>
+                <p id="resultDescription" class="card-description"></p>
+            </div>
+            <div class="card-content">
+                <div id="successContent" th:if="${success}" >
+                    <p class="mb-4">Your email has been successfully verified. You can now log in to your account.</p>
+                    <a href="/login" class="btn btn-primary w-100">Go to Login</a>
+                </div>
+                <div id="errorContent" th:unless="${success}">
+                    <p class="mb-4">We're sorry, but we couldn't verify your email. This could be because:</p>
+                    <ul class="mb-4">
+                        <li>The verification link has expired</li>
+                        <li>The verification link has already been used</li>
+                        <li>The verification link is invalid</li>
+                    </ul>
+                    <p class="mb-4">Please try verifying your email again.</p>
+                    <a href="/verify-email" class="btn btn-primary w-100">Verify Email</a>
+                </div>
+                <p class="mt-6 text-center text-sm text-muted-foreground">
+                    Need help? <a href="/contact" class="font-medium text-primary">Contact support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

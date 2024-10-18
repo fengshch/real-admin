@@ -1,0 +1,30 @@
+plugins {
+    id 'spring-web'
+    id 'spring-cloud'
+    id 'spring-mybatis-flex'
+}
+mybatis {
+    configurations {
+        main {
+            controllerGenerateEnable = false
+            packageConfig {
+                sourceDir = 'src/batis/java'
+                basePackage = 'cc.realtec.real.platform.server'
+            }
+            strategyConfig {
+                unGenerateTables = ['flyway_schema_history']
+            }
+            flyway {
+                cleanDisabled = false
+//                locations = ['classpath:db/migration']
+//                locations = ['classpath:db/flyway']
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(libs.minio)
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+}

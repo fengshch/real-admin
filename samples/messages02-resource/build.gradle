@@ -1,5 +1,7 @@
 plugins {
+    id "spring-web"
     id 'spring-resource'
+    id 'spring-cloud'
 }
 
 dependencies {

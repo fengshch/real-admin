@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -73,22 +74,37 @@ public class AuthServerConfig {
 
     @Bean
     RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
-        RegisteredClient messageClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("gateway-client")
-                .clientSecret("{noop}secret")
+//        RegisteredClient messageClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//                .clientId("gateway-client")
+//                .clientSecret("{noop}secret")
+//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .redirectUri("http://localhost:8090/login/oauth2/code/gateway-client")
+//                .redirectUri("http://localhost:7090/login/oauth2/code/gateway-client")
+//                .scope(OidcScopes.OPENID)
+//                .scope(OidcScopes.PROFILE)
+//                .build();
+//
+
+        RegisteredClient nextClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("next-client")
+                .clientSecret("{noop}123456")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://localhost:8090/login/oauth2/code/gateway-client")
-                .redirectUri("http://localhost:7090/login/oauth2/code/gateway-client")
+                .redirectUri("http://localhost:3000/api/auth/callback/spring")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .build();
 
-
         JdbcRegisteredClientRepository jdbcRegisteredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
-        RegisteredClient messagingClient = jdbcRegisteredClientRepository.findByClientId("gateway-client");
-        if (messagingClient == null) {
-            jdbcRegisteredClientRepository.save(messageClient);
+//        RegisteredClient messagingClient = jdbcRegisteredClientRepository.findByClientId("gateway-client");
+//        if (messagingClient == null) {
+//            jdbcRegisteredClientRepository.save(messageClient);
+//        }
+
+        RegisteredClient existNextClient = jdbcRegisteredClientRepository.findByClientId("next-client");
+        if (existNextClient == null) {
+            jdbcRegisteredClientRepository.save(nextClient);
         }
         return jdbcRegisteredClientRepository;
     }
@@ -117,7 +133,9 @@ public class AuthServerConfig {
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().build();
+        return AuthorizationServerSettings.builder()
+//                .issuer("http://localhost:9090")
+                .build();
     }
 
     @Bean

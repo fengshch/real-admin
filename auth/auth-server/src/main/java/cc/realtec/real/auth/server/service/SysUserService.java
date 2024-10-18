@@ -1,20 +1,24 @@
 package cc.realtec.real.auth.server.service;
 
-import cc.realtec.real.auth.common.entity.SysUser;
+import cc.realtec.real.auth.common.domain.dto.SysUserDto;
+import cc.realtec.real.auth.server.domain.SysUserRequest;
+import cc.realtec.real.auth.server.po.SysUserPo;
+import cc.realtec.real.common.web.exception.BusinessException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface SysUserService {
 
-    boolean create(SysUser sysUser);
+    SysUserPo create(SysUserRequest sysUser) throws BusinessException;
 
-    SysUser findByUsername(String username);
+    SysUserDto findByUsername(String username) throws UsernameNotFoundException;
 
-    SysUser findByEmail(String email);
+    SysUserDto findByEmail(String email) throws UsernameNotFoundException;
 
-    SysUser findByPhoneNumber(String phoneNumber);
+    SysUserDto findByPhoneNumber(String phoneNumber) throws UsernameNotFoundException;
 
-    SysUser findById(String id);
+    SysUserDto findById(String id) throws UsernameNotFoundException;
 
-    boolean update(SysUser sysUser);
+    boolean update(SysUserDto sysUser);
 
     boolean deleteById(String id);
 
@@ -37,5 +41,4 @@ public interface SysUserService {
     void updateAvatarUrl(String id, String avatarUrl);
 
     void resetPassword(String id, String newPassword);
-
 }

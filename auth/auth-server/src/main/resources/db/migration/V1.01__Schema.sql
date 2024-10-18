@@ -73,43 +73,58 @@ CREATE TABLE oauth2_authorization_consent
 -- Create Users Table
 CREATE TABLE sys_user
 (
-    id                      VARCHAR(50)         NOT NULL PRIMARY KEY,
-    username                VARCHAR(255) UNIQUE NOT NULL,
-    password                VARCHAR(255)        NOT NULL,
-    email                   VARCHAR(255) UNIQUE NOT NULL,
-    email_verified          BOOLEAN             NOT NULL DEFAULT FALSE,
+    id                      VARCHAR(50)  NOT NULL PRIMARY KEY,
+    username                VARCHAR(255) NOT NULL,
+    password                VARCHAR(255) NOT NULL,
+    name                    VARCHAR(255),                        -- full name
     nickname                VARCHAR(255),
-    first_name              VARCHAR(255),
-    last_name               VARCHAR(255),
+    gender                  VARCHAR(10),                         -- 'male', 'female', etc.
+    birthdate               DATE,                                -- date of birth
+    picture                 TEXT,                                -- URL to profile picture
+    email                   VARCHAR(255) UNIQUE,
+    email_verified          BOOLEAN               DEFAULT FALSE, -- is email verified
+    email_token             VARCHAR(255),
+    password_token          VARCHAR(255),
     phone_number            VARCHAR(20),
-    account_non_expired     BOOLEAN             NOT NULL DEFAULT true,
-    account_non_locked      BOOLEAN             NOT NULL DEFAULT true,
-    credentials_non_expired BOOLEAN             NOT NULL DEFAULT true,
-    enabled                 BOOLEAN                      DEFAULT TRUE,
-    avatar_url              TEXT,
-    created_at              TIMESTAMP                    DEFAULT current_timestamp,
-    updated_at              TIMESTAMP                    DEFAULT current_timestamp
+    phone_number_verified   BOOLEAN               DEFAULT FALSE, -- is phone number verified
+
+    account_non_expired     BOOLEAN      NOT NULL DEFAULT true,
+    account_non_locked      BOOLEAN      NOT NULL DEFAULT true,
+    credentials_non_expired BOOLEAN      NOT NULL DEFAULT true,
+    enabled                 BOOLEAN               DEFAULT TRUE,
+    mfa                     BOOLEAN      NOT NULL DEFAULT TRUE,
+    system                  BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_by              VARCHAR(50),
+    updated_by              VARCHAR(50),
+    created_at              TIMESTAMP             DEFAULT current_timestamp,
+    updated_at              TIMESTAMP             DEFAULT current_timestamp
 );
 
-CREATE TABLE password_reset_token
+CREATE TABLE password_reset
 (
     id         VARCHAR(50)  NOT NULL PRIMARY KEY,
     user_id    VARCHAR(50)  NOT NULL,
     token      VARCHAR(255) NOT NULL,
-    email_sent BOOLEAN      NOT NULL DEFAULT FALSE,
+    sent       BOOLEAN      NOT NULL DEFAULT FALSE,
+    expired_at TIMESTAMP    NOT NULL,
+    created_by VARCHAR(50),
+    updated_by VARCHAR(50),
     created_at TIMESTAMP             DEFAULT current_timestamp,
-    expires_at TIMESTAMP    NOT NULL,
+    updated_at TIMESTAMP             DEFAULT current_timestamp,
     FOREIGN KEY (user_id) REFERENCES sys_user (id) ON DELETE CASCADE
 );
 
-CREATE TABLE verification_token
+CREATE TABLE email_verification
 (
     id         VARCHAR(50)  NOT NULL PRIMARY KEY,
     user_id    VARCHAR(50)  NOT NULL,
     token      VARCHAR(255) NOT NULL,
-    email_sent BOOLEAN      NOT NULL DEFAULT FALSE,
+    sent       BOOLEAN      NOT NULL DEFAULT FALSE,
+    expired_at TIMESTAMP    NOT NULL,
+    created_by VARCHAR(50),
+    updated_by VARCHAR(50),
     created_at TIMESTAMP             DEFAULT current_timestamp,
-    expires_at TIMESTAMP    NOT NULL,
+    updated_at TIMESTAMP             DEFAULT current_timestamp,
     FOREIGN KEY (user_id) REFERENCES sys_user (id) ON DELETE CASCADE
 );
 
@@ -119,8 +134,11 @@ CREATE TABLE sys_role
     id          VARCHAR(50)         NOT NULL PRIMARY KEY,
     name        VARCHAR(255) UNIQUE NOT NULL,
     description VARCHAR(255),
-    created_at  TIMESTAMP DEFAULT current_timestamp,
-    updated_at  TIMESTAMP DEFAULT current_timestamp
+    system      BOOLEAN             NOT NULL DEFAULT FALSE,
+    created_by  VARCHAR(50),
+    updated_by  VARCHAR(50),
+    created_at  TIMESTAMP                    DEFAULT current_timestamp,
+    updated_at  TIMESTAMP                    DEFAULT current_timestamp
 );
 
 -- Create Permissions Table
@@ -129,18 +147,25 @@ CREATE TABLE sys_authority
     id          VARCHAR(50)         NOT NULL PRIMARY KEY,
     name        VARCHAR(255) UNIQUE NOT NULL,
     description VARCHAR(255),
-    created_at  TIMESTAMP DEFAULT current_timestamp,
-    updated_at  TIMESTAMP DEFAULT current_timestamp
+    system      BOOLEAN             NOT NULL DEFAULT FALSE,
+    created_by  VARCHAR(50),
+    updated_by  VARCHAR(50),
+    created_at  TIMESTAMP                    DEFAULT current_timestamp,
+    updated_at  TIMESTAMP                    DEFAULT current_timestamp
 );
 
 -- Create Groups Table
 CREATE TABLE sys_group
 (
     id          VARCHAR(50)         NOT NULL PRIMARY KEY,
+    parent_id   VARCHAR(50),
     name        VARCHAR(255) UNIQUE NOT NULL,
     description VARCHAR(255),
-    created_at  TIMESTAMP DEFAULT current_timestamp,
-    updated_at  TIMESTAMP DEFAULT current_timestamp
+    system      BOOLEAN             NOT NULL DEFAULT FALSE,
+    created_by  VARCHAR(50),
+    updated_by  VARCHAR(50),
+    created_at  TIMESTAMP                    DEFAULT current_timestamp,
+    updated_at  TIMESTAMP                    DEFAULT current_timestamp
 );
 
 -- Create UserGroups Table
@@ -148,7 +173,11 @@ CREATE TABLE sys_user_group
 (
     user_id    VARCHAR(50) NOT NULL,
     group_id   VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT current_timestamp,
+    system     BOOLEAN     NOT NULL DEFAULT FALSE,
+    created_by VARCHAR(50),
+    updated_by VARCHAR(50),
+    created_at TIMESTAMP            DEFAULT current_timestamp,
+    updated_at TIMESTAMP            DEFAULT current_timestamp,
     PRIMARY KEY (user_id, group_id),
     FOREIGN KEY (user_id) REFERENCES sys_user (id) ON DELETE CASCADE,
     FOREIGN KEY (group_id) REFERENCES sys_group (id) ON DELETE CASCADE
@@ -159,20 +188,13 @@ CREATE TABLE sys_group_role
 (
     group_id   VARCHAR(50) NOT NULL,
     role_id    VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT current_timestamp,
+    system     BOOLEAN     NOT NULL DEFAULT FALSE,
+    created_by VARCHAR(50),
+    updated_by VARCHAR(50),
+    created_at TIMESTAMP            DEFAULT current_timestamp,
+    updated_at TIMESTAMP            DEFAULT current_timestamp,
     PRIMARY KEY (group_id, role_id),
     FOREIGN KEY (group_id) REFERENCES sys_group (id) ON DELETE CASCADE,
-    FOREIGN KEY (role_id) REFERENCES sys_role (id) ON DELETE CASCADE
-);
-
--- Create UserRoles Table
-CREATE TABLE sys_user_role
-(
-    user_id    VARCHAR(50) NOT NULL,
-    role_id    VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT current_timestamp,
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES sys_user (id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES sys_role (id) ON DELETE CASCADE
 );
 
@@ -181,7 +203,10 @@ CREATE TABLE sys_role_authority
 (
     role_id      VARCHAR(50) NOT NULL,
     authority_id VARCHAR(50) NOT NULL,
+    created_by   VARCHAR(50),
+    updated_by   VARCHAR(50),
     created_at   TIMESTAMP DEFAULT current_timestamp,
+    updated_at   TIMESTAMP DEFAULT current_timestamp,
     PRIMARY KEY (role_id, authority_id),
     FOREIGN KEY (role_id) REFERENCES sys_role (id) ON DELETE CASCADE,
     FOREIGN KEY (authority_id) REFERENCES sys_authority (id) ON DELETE CASCADE
@@ -195,5 +220,8 @@ CREATE TABLE uploaded_file
     size               BIGINT       NOT NULL,
     url                TEXT,
     upload_at          TIMESTAMP DEFAULT current_timestamp,
-    created_at         TIMESTAMP DEFAULT current_timestamp
+    created_by         VARCHAR(50),
+    updated_by         VARCHAR(50),
+    created_at         TIMESTAMP DEFAULT current_timestamp,
+    updated_at         TIMESTAMP DEFAULT current_timestamp
 );

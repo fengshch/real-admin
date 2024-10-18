@@ -1,7 +1,7 @@
 [versions]
 springCloudVer = '2023.0.3'
 #springCloudVer = '2024.0.0-M1'
-springBootVer = '3.3.3'
+springBootVer = '3.3.4'
 #springBootVer = '3.4.0-SNAPSHOT'
 springDependencyManagementVer = "1.1.6"
 #jqueryVer = '4.0.0-beta'
@@ -15,16 +15,19 @@ alibabaCloudVer = '2023.0.1.2'
 springCloudBootStrapVer = '4.1.4'
 postgresqlVer ='42.7.3'
 flywayVer = '10.17.0'
-mybatisFlexVer = '1.9.5'
+mybatisFlexVer = '1.9.7'
 mybatisSpringVer = "3.0.4"
 #mapstructVer = '1.6.0.RC1'
-mapstructVer = '1.5.5.Final'
+mapstructVer = '1.6.2'
 lombokMapstructBindingVer = '0.2.0'
 wechatPayVer = '0.2.12'
 guavaVer = '33.2.1-jre'
 logbackVer = '1.5.6'
 jsonVer = "20240303"
 openapiVer = "2.6.0"
+mybatisFlexGradlePluginVer="0.0.1"
+xxlJobVer="2.4.1"
+minioVer="8.5.12"
 
 [libraries]
 springbootGradlePlugin = {group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBootVer"}
@@ -38,6 +41,7 @@ springSecurityCas = {group = "org.springframework.security", name="spring-securi
 springSecurityOauth2Core = {group = "org.springframework.security", name="spring-security-oauth2-core"}
 springSecurityCore = {group ='org.springframework.security', name = 'spring-security-core'}
 oauth2Core = {group = "org.springframework.security", name="spring-security-oauth2-core"}
+xxlJobCore={group="com.xuxueli", name="xxl-job-core", version.ref="xxlJobVer"}
 
 springBootStarterWeb = {group = "org.springframework.boot", name="spring-boot-starter-web"}
 springBootStarterWebflux = {group = "org.springframework.boot", name="spring-boot-starter-webflux"}
@@ -69,6 +73,7 @@ flywayPostgresql ={group = "org.flywaydb", name="flyway-database-postgresql", ve
 postgresql = {group = "org.postgresql", name="postgresql", version.ref="postgresqlVer"}
 mysql={group = "com.mysql", name="mysql-connector-j"}
 h2 = {group = "com.h2database", name="h2"}
+minio={group = "io.minio", name="minio", version.ref="minioVer"}
 
 springBootStarterTest= {group =  "org.springframework.boot", name  = "spring-boot-starter-test"}
 springSecurityTest = { group = "org.springframework.security", name  = "spring-security-test"}
@@ -94,11 +99,12 @@ wechatPay = {group = "com.github.wechatpay-apiv3", name="wechatpay-java", versio
 json = {group="org.json", name="json", version.ref="jsonVer"}
 openapiStarterWebMvcUI = {group = "org.springdoc", name="springdoc-openapi-starter-webmvc-ui", version.ref="openapiVer"}
 openapiStarterWebfluxUI = {group = "org.springdoc", name="springdoc-openapi-starter-webflux-ui", version.ref="openapiVer"}
-
+mybatisFlexGradlePlugin={group="com.github.fengshch", name="mybatis-flex-gradle-plugin", version.ref="mybatisFlexGradlePluginVer"}
 [bundles]
 springBoot = ["springBootStarterWeb"]
 springCloud = ["springCloudBootstrap"]
 alibabaCloud = ["alibabaNacosDiscovery", "alibabaNacosConfig"]
+oauth2Resouve=["oauth2ResourceServer", "springBootStarterSecurity", "springBootStarterOAuth2Client"]
 
 
 [plugins]

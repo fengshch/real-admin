@@ -1,6 +1,6 @@
 package cc.realtec.real.auth.server.security;
 
-import cc.realtec.real.auth.common.entity.SysUser;
+import cc.realtec.real.auth.common.domain.dto.SysUserDto;
 import cc.realtec.real.auth.server.service.SysUserService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +17,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUser sysUser = sysUserService.findByUsername(username);
-        if (sysUser == null) {
-            throw new UsernameNotFoundException("The user not found");
+        SysUserDto sysUser = sysUserService.findByUsername(username);
+        if(!sysUser.getEmailVerified()){
+            throw new UsernameNotFoundException("Email not verified");
         }
         return User.builder()
                 .username(sysUser.getUsername())

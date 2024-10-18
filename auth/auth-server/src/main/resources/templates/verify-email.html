@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <!-- jQuery -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <!--    <div id="messageContainer" class="message-container" style="display: none;"></div>-->
+    <div th:if="${message}" class="message-container error" role="alert" th:text="${message}">
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-transparent border-bottom-0">
+                <h2 class="card-title">Email Verification</h2>
+            </div>
+            <div class="card-content">
+                <form id="resendVerificationForm" method="post" action="/verify-email">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Request New Verification Token</button>
+                </form>
+                <p class="mt-6 text-center text-sm text-muted-foreground">
+                    Remember your password? <a href="/login" class="font-medium text-primary">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

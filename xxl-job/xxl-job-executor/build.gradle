@@ -1,0 +1,11 @@
+plugins {
+	id 'spring-web'
+	id 'spring-cloud'
+}
+
+
+dependencies {
+	implementation(project(":xxl-job:xxl-job-common"))
+	implementation(libs.xxlJobCore)
+}
+

@@ -9,7 +9,7 @@ import java.io.Serial;
  *  表定义层。
  *
  * @author bill
- * @since 2024-08-20
+ * @since 2024-10-18
  */
 public class UploadedFileTableDef extends TableDef {
 
@@ -37,7 +37,16 @@ public class UploadedFileTableDef extends TableDef {
     public final QueryColumn CREATED_AT = new QueryColumn(this, "created_at");
 
     
+    public final QueryColumn CREATED_BY = new QueryColumn(this, "created_by");
+
+    
     public final QueryColumn EXTENSION = new QueryColumn(this, "extension");
+
+    
+    public final QueryColumn UPDATED_AT = new QueryColumn(this, "updated_at");
+
+    
+    public final QueryColumn UPDATED_BY = new QueryColumn(this, "updated_by");
 
     
     public final QueryColumn ORIGINAL_FILE_NAME = new QueryColumn(this, "original_file_name");
@@ -50,7 +59,7 @@ public class UploadedFileTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ORIGINAL_FILE_NAME, EXTENSION, SIZE, URL, UPLOAD_AT, CREATED_AT};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, ORIGINAL_FILE_NAME, EXTENSION, SIZE, URL, UPLOAD_AT, CREATED_BY, UPDATED_BY, CREATED_AT, UPDATED_AT};
 
     public UploadedFileTableDef() {
         super("", "uploaded_file");

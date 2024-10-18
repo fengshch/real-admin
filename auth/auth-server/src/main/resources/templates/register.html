@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <!-- jQuery -->
+    <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/styles.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <div id="messageContainer" class="message-container" style="display: none;"></div>
+    <div th:if="${message}" class="message-container error" role="alert" th:text="${message}">
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-transparent border-bottom-0">
+                <h2 class="card-title">User Registration</h2>
+                <p class="card-description">Create a new account</p>
+            </div>
+            <div class="card-content">
+                <div class="tabs" role="tablist">
+                    <button class="tab active" id="email-tab" data-bs-toggle="tab" data-bs-target="#email-tab-pane" type="button" role="tab">Register with Email</button>
+                    <button class="tab" id="phone-tab" data-bs-toggle="tab" data-bs-target="#phone-tab-pane" type="button" role="tab">Register with Phone</button>
+                </div>
+                <div class="tab-content" id="registerTabsContent">
+                    <div class="tab-pane fade show active" id="email-tab-pane" role="tabpanel">
+                        <form id="emailForm" action="/register" method="post">
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="mfa" name="mfa">
+                                <label class="form-check-label" for="mfa">Enable Multi-Factor Authentication</label>
+                            </div>
+                            <div class="text-end mb-2">
+                                <a href="/verify-email" class="text-sm text-primary">Verify Email Again</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="phone-tab-pane" role="tabpanel">
+                        <form id="phoneForm" action="/register" method="post">
+                            <div class="form-group">
+                                <label for="phone-username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="phone-username" name="username" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="phone-password" name="password" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone-confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="phone-confirmPassword" name="confirmPassword" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="verificationCode" class="form-label">Verification Code</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="verificationCode" name="verificationCode" required>
+                                    <button class="btn btn-outline" type="button" id="sendCode">Send Code</button>
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" id="phone-mfa" name="mfa">
+                                <label class="form-check-label" for="phone-mfa">Enable Multi-Factor Authentication</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                        </form>
+                    </div>
+                </div>
+                <p class="mt-6 text-center text-sm text-muted-foreground">
+                    Already have an account? <a href="/login" class="font-medium text-primary">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.tab').on('click', function() {
+            $('.tab').removeClass('active');
+            $(this).addClass('active');
+            $('.tab-pane').removeClass('show active');
+            $($(this).data('bs-target')).addClass('show active');
+        });
+
+        function validateForm(formData, isPhoneForm) {
+            let isValid = true;
+
+            // Validate username
+            if (formData.username.length < 3) {
+                showError(isPhoneForm ? '#phone-username' : '#username', 'Username must be at least 3 characters long');
+                isValid = false;
+            } else {
+                clearError(isPhoneForm ? '#phone-username' : '#username');
+            }
+
+            // Validate password
+            if (formData.password.length < 8) {
+                showError(isPhoneForm ? '#phone-password' : '#password', 'Password must be at least 8 characters long');
+                isValid = false;
+            } else {
+                clearError(isPhoneForm ? '#phone-password' : '#password');
+            }
+
+            // Validate confirm password
+            if (formData.password !== formData.confirmPassword) {
+                showError(isPhoneForm ? '#phone-confirmPassword' : '#confirmPassword', 'Passwords do not match');
+                isValid = false;
+            } else {
+                clearError(isPhoneForm ? '#phone-confirmPassword' : '#confirmPassword');
+            }
+
+            if (isPhoneForm) {
+                // Validate phone number
+                const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+                if (!phoneRegex.test(formData.phone)) {
+                    showError('#phone', 'Please enter a valid phone number');
+                    isValid = false;
+                } else {
+                    clearError('#phone');
+                }
+
+                // Validate verification code
+                if (!formData.verificationCode) {
+                    showError('#verificationCode', 'Verification code is required');
+                    isValid = false;
+                } else {
+                    clearError('#verificationCode');
+                }
+            } else {
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    showError('#email', 'Please enter a valid email address');
+                    isValid = false;
+                } else {
+                    clearError('#email');
+                }
+            }
+
+            return isValid;
+        }
+
+        function showError(selector, message) {
+            $(selector).addClass('is-invalid');
+            $(selector).siblings('.invalid-feedback').text(message);
+        }
+
+        function clearError(selector) {
+            $(selector).removeClass('is-invalid');
+            $(selector).siblings('.invalid-feedback').text('');
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            const isPhoneForm = $(form).attr('id') === 'phoneForm';
+
+            // Ensure mfa is always a boolean
+            data.mfa = form.querySelector('input[name="mfa"]').checked;
+
+            if (validateForm(data, isPhoneForm)) {
+                // Form is valid, submit the form
+                form.submit();
+            }
+        }
+
+        function sendVerificationCode() {
+            showMessage('Verification code sent!', 'success');
+        }
+
+        function showMessage(message, type) {
+            const messageContainer = $('#messageContainer');
+            messageContainer.removeClass('success error').addClass(type);
+            messageContainer.text(message);
+            messageContainer.show();
+
+            // Hide the message after 5 seconds
+            setTimeout(() => {
+                messageContainer.hide();
+            }, 5000);
+        }
+
+        $('#emailForm, #phoneForm').on('submit', handleSubmit);
+        $('#sendCode').on('click', sendVerificationCode);
+    });
+</script>
+</body>
+</html>

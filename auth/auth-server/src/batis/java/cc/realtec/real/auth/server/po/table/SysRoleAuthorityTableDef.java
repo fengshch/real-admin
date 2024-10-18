@@ -9,7 +9,7 @@ import java.io.Serial;
  *  表定义层。
  *
  * @author bill
- * @since 2024-08-20
+ * @since 2024-10-18
  */
 public class SysRoleAuthorityTableDef extends TableDef {
 
@@ -28,6 +28,15 @@ public class SysRoleAuthorityTableDef extends TableDef {
     public final QueryColumn CREATED_AT = new QueryColumn(this, "created_at");
 
     
+    public final QueryColumn CREATED_BY = new QueryColumn(this, "created_by");
+
+    
+    public final QueryColumn UPDATED_AT = new QueryColumn(this, "updated_at");
+
+    
+    public final QueryColumn UPDATED_BY = new QueryColumn(this, "updated_by");
+
+    
     public final QueryColumn AUTHORITY_ID = new QueryColumn(this, "authority_id");
 
     /**
@@ -38,7 +47,7 @@ public class SysRoleAuthorityTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ROLE_ID, AUTHORITY_ID, CREATED_AT};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ROLE_ID, AUTHORITY_ID, CREATED_BY, UPDATED_BY, CREATED_AT, UPDATED_AT};
 
     public SysRoleAuthorityTableDef() {
         super("", "sys_role_authority");

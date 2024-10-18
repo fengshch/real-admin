@@ -10,4 +10,9 @@ public class DemoController {
     public String hello(){
         return "Hello";
     }
+
+    @GetMapping("/business")
+    public String error(){
+        throw new RuntimeException("business error");
+    }
 }

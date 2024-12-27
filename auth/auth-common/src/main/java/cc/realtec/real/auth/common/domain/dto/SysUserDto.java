@@ -25,7 +25,8 @@ public class SysUserDto {
 
     private LocalDate birthdate;
 
-    private String picture;
+    private String avatarName;
+    private String avatarUrl;
 
     private String email;
 
@@ -33,7 +34,7 @@ public class SysUserDto {
 
     private String phoneNumber;
 
-    private String phoneNumberVerified;
+    private Boolean phoneNumberVerified;
 
     private Boolean accountNonExpired;
 

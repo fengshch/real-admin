@@ -8,7 +8,7 @@ import cc.realtec.real.auth.server.po.Oauth2RegisteredClientPo;
  *  映射层。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 @Mapper
 public interface Oauth2RegisteredClientMapper extends BaseMapper<Oauth2RegisteredClientPo> {

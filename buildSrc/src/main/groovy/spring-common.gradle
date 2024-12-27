@@ -2,6 +2,7 @@ plugins{
     id 'java'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
+    id 'idea'
 }
 
 group = projectGroup
@@ -23,15 +24,15 @@ repositories {
 //    maven { url 'https://maven.aliyun.com/repository/spring/'}
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     implementation(libs.mapstruct)
 //    testImplementation(libs.mapstruct)
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor(libs.mapstructProcessor)
 //    testAnnotationProcessor(libs.mapstructProcessor)
     annotationProcessor(libs.lombokMapstructBinding)
@@ -50,4 +51,11 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+idea{
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }

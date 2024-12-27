@@ -1,22 +1,38 @@
 package cc.realtec.real.auth.server.controller;
 
+import cc.realtec.real.auth.common.domain.dto.SysUserDto;
+import cc.realtec.real.auth.server.domain.ChangePasswordRequest;
+import cc.realtec.real.auth.server.domain.ResetPasswordRequest;
+import cc.realtec.real.auth.server.domain.SysUserProfile;
 import cc.realtec.real.auth.server.domain.SysUserRequest;
+import cc.realtec.real.auth.server.domain.converter.SysUserConverter;
 import cc.realtec.real.auth.server.po.SysUserPo;
 import cc.realtec.real.auth.server.service.EmailVerificationService;
+import cc.realtec.real.auth.server.service.MinioService;
 import cc.realtec.real.auth.server.service.PasswordResetService;
 import cc.realtec.real.auth.server.service.SysUserService;
+import cc.realtec.real.common.web.domain.Message;
+import cc.realtec.real.common.web.exception.BusinessException;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +41,9 @@ public class AuthController {
     private final EmailVerificationService emailVerificationService;
     private final SysUserService sysUserService;
     private final PasswordResetService passwordResetService;
+    private final Validator validator;
+    private final MinioService minioService;
+    private final SysUserConverter sysUserConverter = SysUserConverter.INSTANCE;
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, Model model) {
@@ -93,7 +112,7 @@ public class AuthController {
 
     @RequestMapping(value = "/forget-password", method = {RequestMethod.GET, RequestMethod.POST})
     public String forgotPassword(HttpServletRequest request, Model model, @RequestParam(required = false) String email) {
-        if(request.getMethod().equalsIgnoreCase("POST") && email != null) {
+        if (request.getMethod().equalsIgnoreCase("POST") && email != null) {
             try {
                 String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
                 passwordResetService.sendResetPasswordTokenByEmail(email, baseUrl);
@@ -106,8 +125,37 @@ public class AuthController {
         return "forget-password";
     }
 
-    @GetMapping("/reset-password")
-    public String resetPassword() {
+    @RequestMapping(value = "/reset-password", method = {RequestMethod.GET, RequestMethod.POST})
+    public String resetPassword(HttpServletRequest request,
+                                @RequestParam String token,
+                                @RequestBody ResetPasswordRequest resetPasswordRequest, Model model) {
+        if (!StringUtils.hasLength(token)) {
+            model.addAttribute("message", "Token is required.");
+            return "reset-password";
+        }
+
+        if (request.getMethod().equalsIgnoreCase("GET")) {
+            model.asMap().remove("message");
+            return "reset-password";
+        }
+
+        Set<ConstraintViolation<ResetPasswordRequest>> violations = validator.validate(resetPasswordRequest);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessage = new StringBuilder("Validation failed: ");
+            for (ConstraintViolation<ResetPasswordRequest> violation : violations) {
+                errorMessage.append(violation.getMessage()).append(" ");
+            }
+            model.addAttribute("message", errorMessage.toString());
+            return "reset-password";
+        }
+
+        try {
+            passwordResetService.resetPassword(resetPasswordRequest);
+            model.addAttribute("message", "Password reset successfully.");
+        } catch (Exception e) {
+            log.error("Failed to reset password: {}", e.getMessage());
+            model.addAttribute("message", "Failed to reset password: " + e.getMessage());
+        }
         return "reset-password";
     }
 
@@ -115,4 +163,96 @@ public class AuthController {
     public String resetPasswordResult() {
         return "reset-password-result";
     }
+
+    @RequestMapping(value = "/change-password", method = {RequestMethod.GET, RequestMethod.POST})
+    public String changePassword(HttpServletRequest request,
+                                 @AuthenticationPrincipal User user,
+                                 @RequestBody ChangePasswordRequest changePasswordRequest, Model model) {
+
+        if (request.getMethod().equalsIgnoreCase("GET")) {
+            model.asMap().remove("message");
+            return "change-password";
+        }
+
+        Set<ConstraintViolation<ChangePasswordRequest>> violations = validator.validate(changePasswordRequest);
+        if (!violations.isEmpty()) {
+            StringBuilder errorMessage = new StringBuilder("Validation failed: ");
+            for (ConstraintViolation<ChangePasswordRequest> violation : violations) {
+                errorMessage.append(violation.getMessage()).append(" ");
+            }
+            model.addAttribute("message", errorMessage.toString());
+            return "change-password";
+        }
+
+        try {
+            sysUserService.changePassword(user.getUsername(), changePasswordRequest);
+//            passwordResetService.resetPassword(resetPasswordRequest);
+            model.addAttribute("message", "Password changed successfully.");
+        } catch (Exception e) {
+            log.error("Failed to change password: {}", e.getMessage());
+            model.addAttribute("message", "Failed to change password: " + e.getMessage());
+        }
+        return "change-password";
+    }
+
+    @RequestMapping(value = "/profile", method = {RequestMethod.GET, RequestMethod.POST})
+    public String profile(@AuthenticationPrincipal User user,
+                          HttpServletRequest request,
+                          Model model,
+                          @RequestParam(value = "avatarFile", required = false) MultipartFile avatarFile,
+                          @RequestBody SysUserProfile sysUserProfile)  {
+        String username = user.getUsername();
+        SysUserDto sysUserDto = sysUserService.findByUsername(username);
+
+        if (isPostRequest(request) && sysUserProfile != null) {
+            String avatarName = null;
+            try {
+                avatarName = handleAvatarFile(avatarFile);
+            } catch (Exception e) {
+                log.error("Failed to save avatar file: {}", e.getMessage());
+                addMessageToModel(model, "Failed to save avatar file: " + e.getMessage(), "message-error");
+                model.addAttribute("sysUser", sysUserProfile);
+                return "profile";
+            }
+            if (avatarName != null) {
+                sysUserProfile.setAvatarName(avatarName);
+                sysUserProfile.setAvatarUrl(minioService.getObjectUrlByObjectName(avatarName));
+            }
+            sysUserDto = sysUserConverter.profileToDto(sysUserProfile, sysUserDto);
+            sysUserService.update(sysUserDto);
+            addMessageToModel(model, "Profile updated successfully.", "message-success");
+        } else if (request.getMethod().equalsIgnoreCase("get")) {
+            sysUserProfile = sysUserConverter.dtoToProfile(sysUserDto);
+            if(sysUserProfile.getAvatarName() != null){
+                sysUserProfile.setAvatarUrl(minioService.getObjectUrlByObjectName(sysUserProfile.getAvatarName()));
+            }
+        }
+        model.addAttribute("sysUser", sysUserProfile);
+        return "profile";
+    }
+
+    private boolean isPostRequest(HttpServletRequest request) {
+        return request.getMethod().equalsIgnoreCase("POST");
+    }
+
+    private String handleAvatarFile(MultipartFile avatarFile) throws Exception{
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            try {
+                String fileName = avatarFile.getOriginalFilename();
+                return minioService.uploadFile(fileName, avatarFile.getInputStream(), avatarFile.getContentType());
+            } catch (Exception e) {
+                log.error("Failed to save avatar file: {}", e.getMessage());
+                throw new BusinessException("Failed to save avatar file: " + e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    private void addMessageToModel(Model model, String content, String type) {
+        Message message = new Message();
+        message.setType(type);
+        message.setContent(content);
+        model.addAttribute("message", message);
+    }
+
 }

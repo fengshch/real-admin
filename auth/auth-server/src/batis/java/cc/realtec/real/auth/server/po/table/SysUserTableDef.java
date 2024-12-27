@@ -9,7 +9,7 @@ import java.io.Serial;
  *  表定义层。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 public class SysUserTableDef extends TableDef {
 
@@ -43,9 +43,6 @@ public class SysUserTableDef extends TableDef {
     public final QueryColumn ENABLED = new QueryColumn(this, "enabled");
 
     
-    public final QueryColumn PICTURE = new QueryColumn(this, "picture");
-
-    
     public final QueryColumn NICKNAME = new QueryColumn(this, "nickname");
 
     
@@ -68,6 +65,9 @@ public class SysUserTableDef extends TableDef {
 
     
     public final QueryColumn UPDATED_BY = new QueryColumn(this, "updated_by");
+
+    
+    public final QueryColumn AVATAR_NAME = new QueryColumn(this, "avatar_name");
 
     
     public final QueryColumn EMAIL_TOKEN = new QueryColumn(this, "email_token");
@@ -101,7 +101,7 @@ public class SysUserTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, USERNAME, PASSWORD, NAME, NICKNAME, GENDER, BIRTHDATE, PICTURE, EMAIL, EMAIL_VERIFIED, EMAIL_TOKEN, PASSWORD_TOKEN, PHONE_NUMBER, PHONE_NUMBER_VERIFIED, ACCOUNT_NON_EXPIRED, ACCOUNT_NON_LOCKED, CREDENTIALS_NON_EXPIRED, ENABLED, MFA, SYSTEM, CREATED_BY, UPDATED_BY, CREATED_AT, UPDATED_AT};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, USERNAME, PASSWORD, NAME, NICKNAME, GENDER, BIRTHDATE, AVATAR_NAME, EMAIL, EMAIL_VERIFIED, EMAIL_TOKEN, PASSWORD_TOKEN, PHONE_NUMBER, PHONE_NUMBER_VERIFIED, ACCOUNT_NON_EXPIRED, ACCOUNT_NON_LOCKED, CREDENTIALS_NON_EXPIRED, ENABLED, MFA, SYSTEM, CREATED_BY, UPDATED_BY, CREATED_AT, UPDATED_AT};
 
     public SysUserTableDef() {
         super("", "sys_user");

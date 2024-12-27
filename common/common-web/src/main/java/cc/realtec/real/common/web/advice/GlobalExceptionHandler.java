@@ -1,10 +1,7 @@
 package cc.realtec.real.common.web.advice;
 
 import cc.realtec.real.common.web.domain.ApiResponse;
-import cc.realtec.real.common.web.exception.BusinessException;
-import cc.realtec.real.common.web.exception.ForbiddenException;
-import cc.realtec.real.common.web.exception.ResourceNotFoundException;
-import cc.realtec.real.common.web.exception.UnauthorizedException;
+import cc.realtec.real.common.web.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +24,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiResponse<?>> usernameNotFoundExceptionHandler(UsernameNotFoundException exception){
         log.error("User not found: ", exception);
+        return ResponseEntity.ok(ApiResponse.notFound(exception.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ApiResponse<?>> invalidPasswordExceptionHandler(InvalidPasswordException exception){
+        log.error("Invalid password: ", exception);
+        return ResponseEntity.ok(ApiResponse.notFound(exception.getMessage()));
+    }
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> emailNotFoundExceptionHandler(EmailNotFoundException exception){
+        log.error("Email not found: ", exception);
         return ResponseEntity.ok(ApiResponse.notFound(exception.getMessage()));
     }
 
@@ -63,6 +71,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<?>> businessExceptionHandler(BusinessException exception){
         log.error("Business error: ", exception);
+        return ResponseEntity.ok(ApiResponse.business_error(exception.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ApiResponse<?>> invalidExceptionHandler(InvalidTokenException exception){
+        log.error("Invalid token error: ", exception);
         return ResponseEntity.ok(ApiResponse.business_error(exception.getMessage()));
     }
 }

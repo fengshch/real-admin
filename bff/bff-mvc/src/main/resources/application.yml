@@ -32,4 +32,3 @@ spring:
       - optional:nacos:${spring.application.name}-prod.yml
     activate:
       on-profile: prod
-

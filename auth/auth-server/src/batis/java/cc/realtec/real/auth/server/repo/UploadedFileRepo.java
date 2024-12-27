@@ -7,7 +7,7 @@ import cc.realtec.real.auth.server.po.UploadedFilePo;
  *  服务层。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 public interface UploadedFileRepo extends IService<UploadedFilePo> {
 

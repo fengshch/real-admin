@@ -1,6 +1,6 @@
 package cc.realtec.real.common.web.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends Exception {
     public ResourceNotFoundException() {
         super();
     }

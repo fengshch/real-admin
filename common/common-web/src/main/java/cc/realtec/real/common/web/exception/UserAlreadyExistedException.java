@@ -1,6 +1,6 @@
 package cc.realtec.real.common.web.exception;
 
-public class UserAlreadyExistedException extends RuntimeException {
+public class UserAlreadyExistedException extends Exception {
     public UserAlreadyExistedException() {
         super();
     }

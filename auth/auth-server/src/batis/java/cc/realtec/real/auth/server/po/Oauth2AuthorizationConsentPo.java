@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
  *  实体类。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 @Data
 @Builder

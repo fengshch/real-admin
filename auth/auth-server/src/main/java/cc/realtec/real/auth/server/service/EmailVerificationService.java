@@ -17,7 +17,7 @@ public interface EmailVerificationService {
 
     void sendVerificationToken(SysUserPo sysUserPo , String baseUrl);
 
-    void sendVerificationTokenByEmail(String email , String baseUrl);
+    void sendVerificationTokenByEmail(String email , String baseUrl) throws Exception;
 
     void verifyEmail(String token) throws Exception;
 

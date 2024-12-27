@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  *  服务层实现。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 @Service
 public class SysGroupRoleRepoImpl extends ServiceImpl<SysGroupRoleMapper, SysGroupRolePo> implements SysGroupRoleRepo {

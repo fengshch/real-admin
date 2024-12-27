@@ -1,6 +1,6 @@
 package cc.realtec.real.common.web.exception;
 
-public class InvalidReCaptchaException extends RuntimeException {
+public class InvalidReCaptchaException extends Exception {
     public InvalidReCaptchaException() {
         super();
     }

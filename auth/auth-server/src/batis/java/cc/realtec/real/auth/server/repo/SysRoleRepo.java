@@ -7,7 +7,7 @@ import cc.realtec.real.auth.server.po.SysRolePo;
  *  服务层。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 public interface SysRoleRepo extends IService<SysRolePo> {
 

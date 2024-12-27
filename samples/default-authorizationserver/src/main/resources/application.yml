@@ -1,0 +1,11 @@
+server:
+  port: 9000
+  ssl:
+    enabled: false
+
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.springframework.security: trace
+    org.springframework.security.oauth2: trace

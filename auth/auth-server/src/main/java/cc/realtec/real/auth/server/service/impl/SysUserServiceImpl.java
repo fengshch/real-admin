@@ -1,12 +1,14 @@
 package cc.realtec.real.auth.server.service.impl;
 
 import cc.realtec.real.auth.common.domain.dto.SysUserDto;
+import cc.realtec.real.auth.server.domain.ChangePasswordRequest;
 import cc.realtec.real.auth.server.domain.SysUserRequest;
 import cc.realtec.real.auth.server.domain.converter.SysUserConverter;
 import cc.realtec.real.auth.server.po.SysUserPo;
 import cc.realtec.real.auth.server.repo.SysUserRepo;
 import cc.realtec.real.auth.server.service.SysUserService;
 import cc.realtec.real.common.web.exception.BusinessException;
+import cc.realtec.real.common.web.exception.InvalidPasswordException;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +23,7 @@ public class SysUserServiceImpl implements SysUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public SysUserPo create(SysUserRequest sysUser) throws BusinessException {
+    public SysUserPo create(SysUserRequest sysUser) throws Exception {
         sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
         SysUserPo sysUserPO = SysUserConverter.INSTANCE.requestToPo(sysUser);
         SysUserPo sysUserPo = sysUserRepo.getOne(QueryWrapper.create().eq("username", sysUserPO.getUsername()));
@@ -82,9 +84,9 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public boolean update(SysUserDto sysUser) {
+    public void update(SysUserDto sysUser) {
         SysUserPo sysUserPO = SysUserConverter.INSTANCE.dtoToPo(sysUser);
-        return sysUserRepo.updateById(sysUserPO);
+        sysUserRepo.updateById(sysUserPO);
     }
 
     @Override
@@ -128,9 +130,18 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public boolean changePassword(String id, String oldPassword, String newPassword) {
-        return false;
+    public void changePassword(String username, ChangePasswordRequest changePasswordRequest) throws Exception {
+        SysUserPo sysUserPO = sysUserRepo.getOne(QueryWrapper.create().eq("username", username));
+        if (sysUserPO == null) {
+            throw new UsernameNotFoundException("Invalid username");
+        }
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), sysUserPO.getPassword())) {
+            throw new InvalidPasswordException("Invalid old password");
+        }
+        sysUserPO.setPassword(passwordEncoder.encode(changePasswordRequest.getPassword()));
+        sysUserRepo.updateById(sysUserPO);
     }
+
 
     @Override
     public void forgetPassword(String email) {

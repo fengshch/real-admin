@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
 
-    @GetMapping("/")
-    public String index(OAuth2AuthenticationToken auth2AuthenticationToken) {
-        return "Hello, " + auth2AuthenticationToken.getPrincipal().getAttribute("name");
-    }
 
     @GetMapping("/hello")
     public Ret hello(OAuth2AuthenticationToken auth2AuthenticationToken) {

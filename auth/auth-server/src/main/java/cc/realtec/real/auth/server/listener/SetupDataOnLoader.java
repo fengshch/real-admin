@@ -32,8 +32,13 @@ public class SetupDataOnLoader implements ApplicationListener<ContextRefreshedEv
             adminUser.setEmail(applicationProperties.getSystem().getEmail());
             adminUser.setPassword(applicationProperties.getSystem().getPassword());
             adminUser.setSystem(true);
+            adminUser.setEmailVerified(true);
             log.info("System Manager created");
-            sysUserService.create(adminUser);
+            try {
+                sysUserService.create(adminUser);
+            } catch (Exception e) {
+                log.error("Create System Manager failed", e);
+            }
         }
     }
 }

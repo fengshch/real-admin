@@ -8,10 +8,6 @@ import reactor.core.publisher.Mono;
 @RestController
 public class DemoController {
 
-    @GetMapping("/")
-    public Mono<String> index(OAuth2AuthenticationToken auth2AuthenticationToken) {
-        return Mono.just("Hello, " + auth2AuthenticationToken.getPrincipal().getAttribute("name"));
-    }
 
     @GetMapping("/hello")
     public Mono<Ret> hello(OAuth2AuthenticationToken auth2AuthenticationToken) {

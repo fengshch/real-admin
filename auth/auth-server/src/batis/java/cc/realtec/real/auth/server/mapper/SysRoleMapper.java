@@ -8,7 +8,7 @@ import cc.realtec.real.auth.server.po.SysRolePo;
  *  映射层。
  *
  * @author bill
- * @since 2024-10-18
+ * @since 2024-10-24
  */
 @Mapper
 public interface SysRoleMapper extends BaseMapper<SysRolePo> {

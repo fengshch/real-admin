@@ -1,33 +1,32 @@
 [versions]
-springCloudVer = '2023.0.3'
-#springCloudVer = '2024.0.0-M1'
-springBootVer = '3.3.4'
-#springBootVer = '3.4.0-SNAPSHOT'
-springDependencyManagementVer = "1.1.6"
+#springCloudVer = '2023.0.4'
+#springBootVer = '3.3.7'
+springCloudVer = '2024.0.0'
+springBootVer = '3.4.1'
+springDependencyManagementVer = "1.1.7"
 #jqueryVer = '4.0.0-beta'
 jqueryVer = '3.7.1'
 bootstrapVer = "5.3.3"
-springAuthorizatonServerVer = "1.3.1"
+springAuthorizatonServerVer = "1.4.1"
 #okhttp3Ver= "5.0.0-alpha.14"
 okhttp3Ver= "4.12.0"
-oauth2OidcSdkVer = "11.14"
-alibabaCloudVer = '2023.0.1.2'
-springCloudBootStrapVer = '4.1.4'
-postgresqlVer ='42.7.3'
-flywayVer = '10.17.0'
-mybatisFlexVer = '1.9.7'
+oauth2OidcSdkVer = "11.20.1"
+alibabaCloudVer = '2023.0.3.2'
+springCloudBootStrapVer = '4.2.0'
+postgresqlVer ='42.7.4'
+flywayVer = '11.0.1'
+mybatisFlexVer = '1.10.2'
 mybatisSpringVer = "3.0.4"
-#mapstructVer = '1.6.0.RC1'
-mapstructVer = '1.6.2'
+mapstructVer = '1.6.3'
 lombokMapstructBindingVer = '0.2.0'
-wechatPayVer = '0.2.12'
-guavaVer = '33.2.1-jre'
-logbackVer = '1.5.6'
+wechatpayJavaVer = '0.2.15'
+guavaVer = '33.3.1-jre'
+logbackVer = '1.5.12'
 jsonVer = "20240303"
-openapiVer = "2.6.0"
+springdocOpenapiVer = "2.7.0"
 mybatisFlexGradlePluginVer="0.0.1"
-xxlJobVer="2.4.1"
-minioVer="8.5.12"
+xxlJobVer="2.4.2"
+minioVer="8.5.14"
 
 [libraries]
 springbootGradlePlugin = {group = "org.springframework.boot", name = "spring-boot-gradle-plugin", version.ref = "springBootVer"}
@@ -95,10 +94,10 @@ alibabaNacosConfig={group = "com.alibaba.cloud", name="spring-cloud-starter-alib
 springBootStarterActuator = {group = "org.springframework.boot", name="spring-boot-starter-actuator"}
 springBootDevtools = {group = "org.springframework.boot", name="spring-boot-devtools"}
 springBootConfigurationProcessor = {group = "org.springframework.boot", name="spring-boot-configuration-processor"}
-wechatPay = {group = "com.github.wechatpay-apiv3", name="wechatpay-java", version.ref="wechatPayVer"}
+wechatJavaPay = {group = "com.github.wechatpay-apiv3", name="wechatpay-java", version.ref="wechatpayJavaVer"}
 json = {group="org.json", name="json", version.ref="jsonVer"}
-openapiStarterWebMvcUI = {group = "org.springdoc", name="springdoc-openapi-starter-webmvc-ui", version.ref="openapiVer"}
-openapiStarterWebfluxUI = {group = "org.springdoc", name="springdoc-openapi-starter-webflux-ui", version.ref="openapiVer"}
+openapiStarterWebMvcUI = {group = "org.springdoc", name="springdoc-openapi-starter-webmvc-ui", version.ref="springdocOpenapiVer"}
+openapiStarterWebfluxUI = {group = "org.springdoc", name="springdoc-openapi-starter-webflux-ui", version.ref="springdocOpenapiVer"}
 mybatisFlexGradlePlugin={group="com.github.fengshch", name="mybatis-flex-gradle-plugin", version.ref="mybatisFlexGradlePluginVer"}
 [bundles]
 springBoot = ["springBootStarterWeb"]

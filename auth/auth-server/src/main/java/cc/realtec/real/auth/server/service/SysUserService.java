@@ -1,14 +1,14 @@
 package cc.realtec.real.auth.server.service;
 
 import cc.realtec.real.auth.common.domain.dto.SysUserDto;
+import cc.realtec.real.auth.server.domain.ChangePasswordRequest;
 import cc.realtec.real.auth.server.domain.SysUserRequest;
 import cc.realtec.real.auth.server.po.SysUserPo;
-import cc.realtec.real.common.web.exception.BusinessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface SysUserService {
 
-    SysUserPo create(SysUserRequest sysUser) throws BusinessException;
+    SysUserPo create(SysUserRequest sysUser) throws Exception;
 
     SysUserDto findByUsername(String username) throws UsernameNotFoundException;
 
@@ -18,7 +18,7 @@ public interface SysUserService {
 
     SysUserDto findById(String id) throws UsernameNotFoundException;
 
-    boolean update(SysUserDto sysUser);
+    void update(SysUserDto sysUser);
 
     boolean deleteById(String id);
 
@@ -32,7 +32,7 @@ public interface SysUserService {
 
     boolean existsByPhoneNumber(String phoneNumber);
 
-    boolean changePassword(String id, String oldPassword, String newPassword);
+    void changePassword(String username, ChangePasswordRequest changePasswordRequest) throws Exception;
 
     void forgetPassword(String email);
 

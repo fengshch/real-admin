@@ -1,5 +1,6 @@
 package cc.realtec.real.auth.server.service;
 
+import cc.realtec.real.auth.server.domain.ResetPasswordRequest;
 import cc.realtec.real.auth.server.po.SysUserPo;
 
 public interface PasswordResetService {
@@ -11,5 +12,7 @@ public interface PasswordResetService {
 
     void deleteByUserId(String userId);
 
-    void sendResetPasswordTokenByEmail(String email, String baseUrl);
+    void sendResetPasswordTokenByEmail(String email, String baseUrl) throws Exception;
+
+    void resetPassword(ResetPasswordRequest resetPasswordRequest) throws Exception;
 }

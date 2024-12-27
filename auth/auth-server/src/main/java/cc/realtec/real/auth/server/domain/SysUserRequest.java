@@ -21,7 +21,7 @@ public class SysUserRequest {
 
     private LocalDate birthdate;
 
-    private String picture;
+    private String avatarName;
 
     private String email;
 
@@ -29,7 +29,7 @@ public class SysUserRequest {
 
     private String phoneNumber;
 
-    private String phoneNumberVerified;
+    private Boolean phoneNumberVerified;
 
     private Boolean accountNonExpired;
 

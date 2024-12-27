@@ -14,9 +14,9 @@ repositories {
 //    maven { url 'https://maven.aliyun.com/repository/spring/'}
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
-    mavenLocal()
     mavenCentral()
     gradlePluginPortal()
+    mavenLocal()
 }
 
 dependencies {
@@ -34,3 +34,4 @@ idea{
         downloadSources = true
     }
 }
+

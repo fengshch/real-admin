@@ -2,6 +2,7 @@ plugins {
     id 'spring-web'
     id 'spring-mybatis-flex'
     id 'spring-cloud'
+    id 'idea'
 }
 
 mybatis {
@@ -30,15 +31,17 @@ dependencies {
     implementation(project(":common:common-core"))
     implementation(project(":common:common-web"))
 
-    implementation 'org.springframework.session:spring-session-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//    implementation 'org.springframework.session:spring-session-data-redis'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.apache.commons:commons-pool2'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+//    implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.4.0'
+//    runtimeOnly 'org.springframework.security:spring-security-oauth2-authorization-server:1.4.0:sources'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
     implementation(libs.minio)
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
     implementation 'org.apache.commons:commons-lang3:3.15.0'
 //    implementation 'software.amazon.awssdk:s3:2.26.25'
 //    implementation 'io.minio:minio:8.5.11'
@@ -46,3 +49,17 @@ dependencies {
     implementation(libs.bootstrap)
     implementation(libs.jquery)
 }
+
+//tasks.register('downloadSources') {
+//    doLast {
+//        configurations.compileClasspath.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+//            if (artifact.moduleVersion.id.group != 'unspecified') {
+//                def module = artifact.moduleVersion.id
+//                def sourcesJar = configurations.detachedConfiguration(
+//                        dependencies.create("${module.group}:${module.name}:${module.version}:sources")
+//                ).singleFile
+//                println "Downloaded sources for ${module.group}:${module.name}:${module.version}"
+//            }
+//        }
+//    }
+//}

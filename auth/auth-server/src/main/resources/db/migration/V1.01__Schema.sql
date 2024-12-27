@@ -80,7 +80,7 @@ CREATE TABLE sys_user
     nickname                VARCHAR(255),
     gender                  VARCHAR(10),                         -- 'male', 'female', etc.
     birthdate               DATE,                                -- date of birth
-    picture                 TEXT,                                -- URL to profile picture
+    avatar_name              VARCHAR(255),                        -- name of profile picture
     email                   VARCHAR(255) UNIQUE,
     email_verified          BOOLEAN               DEFAULT FALSE, -- is email verified
     email_token             VARCHAR(255),

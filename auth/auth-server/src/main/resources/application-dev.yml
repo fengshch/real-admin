@@ -1,4 +1,13 @@
 spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://172.16.12.219:5432/uaa
+    username: bill
+    password: 123456
+  session:
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
   mail:
     host: 172.16.12.219
     port: 1025
@@ -10,7 +19,53 @@ spring:
           auth: true
           starttls:
             enable: true
-  devtools:
-    restart:
-      enabled: true
-      exclude: /cc/realtec/real/auth/server/domain/converter/**
+  rabbitmq:
+    host: 172.16.12.219
+    port: 5672
+    username: rabbit
+    password: 123456
+  data:
+    redis:
+      host: 172.16.12.219
+      port: 6379
+      password: 123456
+      timeout: 60000
+  # data:
+  #   redis:
+  #     host: 172.16.12.219
+  #     port: 6379
+  #     password: 123456
+  #     database: 0
+  #     connect-timeout: 3000ms
+  #     lettuce:
+  #       pool:
+  #         enabled: true
+  #         max-active: 20 #连接池最大连接数（使用负值表示没有限制）,默认20
+  #         max-wait: -1ms # 连接池最大阻塞等待时间（使用负值表示没有限制）,默认-1
+  #         max-idle: 8 # 连接池中的最大空闲连接,默认8
+  #         min-idle: 0 # 连接池中的最小空闲连接,默认0
+  # session:
+  #   redis:
+  #     flush-mode: on_save
+  #     namespace: spring:auth
+minio:
+  url: http://172.16.12.219:9000
+  access-key: MvwSdGqAvAYjxvRqa9BH
+  secret-key: LhS7RjQYGCtIwf1kc0qUPQR2JWClW5DQrinzS3Tw
+  default-bucket: auth-server
+  avatar-bucket: avatar
+
+logging:
+  level:
+    root: trace
+    org.springframework.web: trace
+    org.springframework.security: trace
+#springdoc:
+#  show-oauth2-endpoints: true
+
+app:
+  application-name: real-admin
+  system:
+    username: system
+    password: system
+    email: system@example.com

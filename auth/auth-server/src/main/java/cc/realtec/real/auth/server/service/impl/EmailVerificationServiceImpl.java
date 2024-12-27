@@ -72,7 +72,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     }
 
     @Override
-    public void sendVerificationTokenByEmail(String email, String baseUrl) {
+    public void sendVerificationTokenByEmail(String email, String baseUrl) throws Exception {
         QueryWrapper queryWrapper = QueryWrapper.create().eq("email", email);
         SysUserPo sysUserPO = sysUserRepo.getOne(queryWrapper);
         if (sysUserPO == null) {
@@ -99,7 +99,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         thyemeleafContext.setVariable("username", emailVerification.getUsername());
         thyemeleafContext.setVariable("verificationLink", verificationLink);
         thyemeleafContext.setVariable("applicationName", applicationProperties.getApplicationName());
-        String htmlBody = thymeleafTemplateEngine().process("verification-token-email", thyemeleafContext);
+        String htmlBody = new ThymeleafEmailTemplate().thymeleafTemplateEngine().process("verification-token-email", thyemeleafContext);
         EmailMessage emailMessage = EmailMessage.builder()
                 .from(applicationProperties.getSystem().getEmail())
                 .to(emailVerification.getEmail())
@@ -115,20 +115,20 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
 
 
 
-    private ITemplateResolver thymeleafTemplateResolver() {
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("mail-templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML");
-        templateResolver.setCharacterEncoding("UTF-8");
-        return templateResolver;
-    }
-
-    private SpringTemplateEngine thymeleafTemplateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(thymeleafTemplateResolver());
-        return templateEngine;
-    }
+//    private ITemplateResolver thymeleafTemplateResolver() {
+//        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+//        templateResolver.setPrefix("mail-templates/");
+//        templateResolver.setSuffix(".html");
+//        templateResolver.setTemplateMode("HTML");
+//        templateResolver.setCharacterEncoding("UTF-8");
+//        return templateResolver;
+//    }
+//
+//    private SpringTemplateEngine thymeleafTemplateEngine() {
+//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//        templateEngine.setTemplateResolver(thymeleafTemplateResolver());
+//        return templateEngine;
+//    }
 
     @Override
     public void verifyEmail(String token) throws Exception {

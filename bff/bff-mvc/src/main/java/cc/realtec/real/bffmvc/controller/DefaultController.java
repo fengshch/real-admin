@@ -10,13 +10,13 @@ public class DefaultController {
     @Value("${app.base-uri}")
     private String appBaseUri;
 
-    @GetMapping("/")
-    public String root() {
-        return "redirect:" + appBaseUri;
-    }
-
-    @GetMapping("/authorized")
-    public String authorized(){
-        return "redirect:" + appBaseUri;
-    }
+//    @GetMapping("/")
+//    public String root() {
+//        return "redirect:" + appBaseUri;
+//    }
+//
+//    @GetMapping("/authorized")
+//    public String authorized(){
+//        return "redirect:" + appBaseUri;
+//    }
 }

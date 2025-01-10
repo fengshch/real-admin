@@ -1,6 +1,5 @@
 package cc.realtec.real.bffmvc.config;
 
-import cc.realtec.real.bffmvc.security.OAuth2AuthorizedClientFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint;
@@ -35,7 +32,6 @@ import java.util.LinkedHashMap;
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final OAuth2AuthorizedClientManager authorizedClientManager;
 
 
     @Value("${app.base-uri}")
@@ -51,7 +47,6 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated())
             .oauth2Login(Customizer.withDefaults())
-            .csrf(AbstractHttpConfigurer::disable)
             .csrf(csrf -> csrf
                 .csrfTokenRepository(cookieCsrfTokenRepository)
                 .csrfTokenRequestHandler(csrfTokenRequestAttributeHandler))

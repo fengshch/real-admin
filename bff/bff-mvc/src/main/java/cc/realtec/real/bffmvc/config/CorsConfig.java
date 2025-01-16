@@ -23,6 +23,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.addAllowedHeader("X-XSRF-TOKEN");
+        config.addAllowedHeader("X-Resource-Auth");
         config.addAllowedHeader(HttpHeaders.CONTENT_TYPE);
         config.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedOrigins(Collections.singletonList(appBaseUri));

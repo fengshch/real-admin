@@ -1,6 +1,7 @@
 package cc.realtec.real.auth.server.config;
 
 import cc.realtec.real.auth.server.security.CustomAuthenticationFailureHandler;
+import cc.realtec.real.auth.server.security.CustomLogoutSuccessHandler;
 import cc.realtec.real.auth.server.security.CustomUserDetailsService;
 import cc.realtec.real.auth.server.service.SysUserService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.ForwardLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -71,14 +75,14 @@ public class DefaultSecurityConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE + 1)
     public SecurityFilterChain jwtSecurityChain(HttpSecurity http) throws Exception {
         http.securityMatchers(matchers -> matchers.requestMatchers("/api/**"))
-                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
-                        .requestMatchers(SecurityConstants.API_PERMIT_URLS).permitAll()
-                        .anyRequest().authenticated())
+            .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
+                .requestMatchers(SecurityConstants.API_PERMIT_URLS).permitAll()
+                .anyRequest().authenticated())
 //                .exceptionHandling(exception->exception
 //                .authenticationEntryPoint(authenticationEntryPoint()))
-                .sessionManagement(
-                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(Customizer.withDefaults()));
+            .sessionManagement(
+                sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(Customizer.withDefaults()));
         http.csrf(AbstractHttpConfigurer::disable);
 //        http.cors(Customizer.withDefaults());
         http.cors(AbstractHttpConfigurer::disable);
@@ -89,18 +93,22 @@ public class DefaultSecurityConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE + 2)
     public SecurityFilterChain defaultSecurityChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
-                        .requestMatchers(SecurityConstants.PERMIT_URLS).permitAll()
-                        .anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .requestMatchers(SecurityConstants.PERMIT_URLS).permitAll()
+                .anyRequest().authenticated())
+            .cors(Customizer.withDefaults())
+            .csrf(AbstractHttpConfigurer::disable)
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
 //            .exceptionHandling(exception->exception
 //                .authenticationEntryPoint(authenticationEntryPoint()))
-                // .oauth2ResourceServer(oauth2 ->
-                // oauth2.opaqueToken(Customizer.withDefaults()))
-                .formLogin(formLogin -> formLogin.loginPage("/login")
-                        .failureHandler(customAuthenticationFailureHandler)
-                        .permitAll());
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(AbstractHttpConfigurer::disable);
+            // .oauth2ResourceServer(oauth2 ->
+            // oauth2.opaqueToken(Customizer.withDefaults()))
+//            .logout(logout->logout.logoutSuccessHandler(new ForwardLogoutSuccessHandler("http://localhost:7090")))
+            .logout(logout->logout.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+            .formLogin(formLogin -> formLogin.loginPage("/login")
+                .failureHandler(customAuthenticationFailureHandler)
+                .permitAll());
+//        http.csrf(AbstractHttpConfigurer::disable);
+//        http.cors(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
@@ -120,7 +128,7 @@ public class DefaultSecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder){
+    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder);

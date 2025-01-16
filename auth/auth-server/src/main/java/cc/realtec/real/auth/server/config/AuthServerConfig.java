@@ -20,6 +20,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -65,14 +66,17 @@ public class AuthServerConfig {
             .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().authenticated())
             .with(authorizationServerConfigurer, (authorizationServer) ->
                 authorizationServer
-                    .oidc((oidc) -> oidc.userInfoEndpoint(userInfo -> userInfo.userInfoMapper(userInfoMapper)))
-            );
-        http.exceptionHandling((exception) -> exception
+                    .oidc((oidc) -> oidc
+                        .logoutEndpoint(Customizer.withDefaults())
+                        .userInfoEndpoint(userInfo -> userInfo.userInfoMapper(userInfoMapper)))
+            )
+            .cors(Customizer.withDefaults())
+            .exceptionHandling((exception) -> exception
 //                    .authenticationEntryPoint(authenticationEntryPoint())
-                .defaultAuthenticationEntryPointFor(
-                    new LoginUrlAuthenticationEntryPoint("/login"),
-                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                )
+                    .defaultAuthenticationEntryPointFor(
+                        new LoginUrlAuthenticationEntryPoint("/login"),
+                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
+                    )
             )
             .oauth2ResourceServer(rs -> rs.jwt(Customizer.withDefaults()));
 //                .oauth2ResourceServer(rs -> rs.opaqueToken(Customizer.withDefaults()));
@@ -120,6 +124,10 @@ public class AuthServerConfig {
             .redirectUri("http://localhost:8090/authorized")
             .redirectUri("http://localhost:7090/login/oauth2/code/gateway-client-oidc")
             .redirectUri("http://localhost:7090/authorized")
+            .postLogoutRedirectUri("http://localhost:7090/logged-out")
+//            .redirectUri("https://localhost:7443/login/oauth2/code/gateway-client-oidc")
+//            .redirectUri("https://localhost:7443/authorized")
+//            .postLogoutRedirectUri("https://localhost:7443/logged-out")
             .scope(OidcScopes.OPENID)
             .scope(OidcScopes.PROFILE)
             .scope("messages.read")

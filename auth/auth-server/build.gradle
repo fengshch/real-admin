@@ -31,11 +31,11 @@ dependencies {
     implementation(project(":common:common-core"))
     implementation(project(":common:common-web"))
 
-//    implementation 'org.springframework.session:spring-session-data-redis'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.apache.commons:commons-pool2'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
-//    implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.4.0'
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+    implementation 'org.springframework.security:spring-security-oauth2-authorization-server:1.4.1'
 //    runtimeOnly 'org.springframework.security:spring-security-oauth2-authorization-server:1.4.0:sources'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
